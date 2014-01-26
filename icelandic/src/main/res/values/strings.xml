@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Icelandic Flash Cards</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="answerText">(answer)</string>
+    <string name="promptText">(prompt)</string>
+    <string name="previousCardText">&lt;</string>
+    <string name="showAnswerText">Answer</string>
+    <string name="nextCardText">&gt;</string>
+    <string name="soundText">Sound</string>
+    <string name="shuffleDeck">Re-Shuffle Deck</string>
+    <string name="answerOn">Answer On</string>
+    <string name="answerOff">Answer Off</string>
+
+</resources>
