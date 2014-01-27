@@ -83,9 +83,9 @@ public class MainActivity extends ActionBarActivity {
         private int currentPosition;
         private TextView promptText;
         private TextView answerText;
-        private String[] answers = {"Takk", "Hállo", "Velkomin", "Velkominn", "Hvað segir þú?",
+        private String[] answers = {"Takk", "Hállo", "Velkomin", "Velkominn", "Hvað heitir þú?",
                 "Ég heiti...", "Ég elska þig.", "Hvar er klósettið?", "Hjálp!", "Það var ekkert."};
-        private String[] questions = {"Thanks", "Hello", "Welcome (to a man)",
+        private String[] questions = {"Thanks", "Hello", "Welcome (to a male)",
                 "Welcome (to a female)", "What's your name?", "My name is...", "I love you.",
                 "Where is the toilet?", "Help!", "You're welcome."};
         private int[] sounds = {R.raw.thanks1_is, R.raw.hello1_is, R.raw.welcome1_is,
