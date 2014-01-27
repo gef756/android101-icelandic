@@ -1,5 +1,11 @@
 package beerfandango.android101.hw2.icelandic;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.media.MediaPlayer;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,6 +23,8 @@ import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
 
+    final Context activityContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
     }
 
 
@@ -44,8 +53,23 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_credits:
+                // Use the Builder class for convenient dialog construction
+                AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
+                builder.setTitle(R.string.action_credits);
+                builder.setMessage(R.string.creditsDetails)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                AlertDialog creditsDialog = builder.create();
+                creditsDialog.show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -59,9 +83,9 @@ public class MainActivity extends ActionBarActivity {
         private int currentPosition;
         private TextView promptText;
         private TextView answerText;
-        private String[] questions = {"Takk", "Hállo", "Velkomin", "Velkominn", "Hvað segir þú?",
+        private String[] answers = {"Takk", "Hállo", "Velkomin", "Velkominn", "Hvað segir þú?",
                 "Ég heiti...", "Ég elska þig.", "Hvar er klósettið?", "Hjálp!", "Það var ekkert."};
-        private String[] answers = {"Thanks", "Hello", "Welcome (to a man)",
+        private String[] questions = {"Thanks", "Hello", "Welcome (to a man)",
                 "Welcome (to a female)", "What's your name?", "My name is...", "I love you.",
                 "Where is the toilet?", "Help!", "You're welcome."};
         private int[] sounds = {R.raw.thanks1_is, R.raw.hello1_is, R.raw.welcome1_is,
@@ -70,6 +94,9 @@ public class MainActivity extends ActionBarActivity {
         private int[] sequence;
         private Button previousButton;
         private Button nextButton;
+        private MediaPlayer mediaP;
+        private Button replayButton;
+        private ToggleButton toggleSoundBtn;
 
 
         public PlaceholderFragment() {
@@ -89,11 +116,14 @@ public class MainActivity extends ActionBarActivity {
             toggleAnswerBtn = (ToggleButton) rootView.findViewById(R.id.toggleAnswer);
             previousButton = (Button) rootView.findViewById(R.id.previousButton);
             nextButton = (Button) rootView.findViewById(R.id.nextButton);
+            replayButton = (Button) rootView.findViewById(R.id.replayButton);
+            toggleSoundBtn = (ToggleButton) rootView.findViewById(R.id.toggleSound);
 
             // add listeners to buttons
             toggleAnswerBtn.setOnClickListener(this);
             previousButton.setOnClickListener(this);
             nextButton.setOnClickListener(this);
+            replayButton.setOnClickListener(this);
             rootView.findViewById(R.id.shuffleDeck).setOnClickListener(this);
 
             // randomize cards
@@ -151,6 +181,10 @@ public class MainActivity extends ActionBarActivity {
                     randomizeQuestions();
                     rewindDeck();
                     break;
+                case R.id.replayButton:
+                    Log.d("ButtonControl", "Replay button pressed.");
+                    playMedia();
+                    break;
             }
         }
 
@@ -162,6 +196,13 @@ public class MainActivity extends ActionBarActivity {
             }
             // clear out answer
             answerText.setText("");
+            // hide replay button
+            replayButton.setVisibility(View.INVISIBLE);
+        }
+
+        private void playMedia() {
+            Log.d("ActivityControl", "Playing media.");
+            mediaP.start();
         }
 
         private void showAnswer() {
@@ -172,6 +213,12 @@ public class MainActivity extends ActionBarActivity {
             }
             // pull answer from list
             answerText.setText(answers[sequence[currentPosition]]);
+            // play media
+            if (toggleSoundBtn.isChecked()) {
+                playMedia();
+            }
+            // show replay button
+            replayButton.setVisibility(View.VISIBLE);
         }
 
         private void showQuestion(int questionNo) {
@@ -179,18 +226,22 @@ public class MainActivity extends ActionBarActivity {
             Log.i("FlashCards", "Question " + questionNo + " is next.");
             promptText.setText(questions[sequence[questionNo]]);
 
-            // After incrementing, check position
+            // check if previous  button needs to be disabled
             if (currentPosition == 0) {
                 previousButton.setEnabled(false);
             } else {
                 previousButton.setEnabled(true);
             }
-
+            // check if next button needs to be disabled
             if (currentPosition == questions.length - 1) {
                 nextButton.setEnabled(false);
             } else {
                 nextButton.setEnabled(true);
             }
+
+            // Prep Media Player
+            mediaP = MediaPlayer.create(getActivity(), sounds[sequence[questionNo]]);
+
         }
 
         private void randomizeQuestions() {

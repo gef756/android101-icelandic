@@ -3,7 +3,7 @@
 
     <string name="app_name">Icelandic Flash Cards</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Version 1.0</string>
     <string name="answerText">(answer)</string>
     <string name="promptText">(prompt)</string>
     <string name="previousCardText">&lt;</string>
@@ -13,5 +13,9 @@
     <string name="shuffleDeck">Re-Shuffle Deck</string>
     <string name="answerOn">Answer On</string>
     <string name="answerOff">Answer Off</string>
+    <string name="replay">&#9654;</string>
+    <string name="action_credits">Credits</string>
+    <string name="creditsDetails">Audio recordings and translations are from www.omniglot.com and are being used for educational purposes.
+        \n\nRecordings by Stefan Steinsson. Consequently, this application is not for commercial use.</string>
 
 </resources>
